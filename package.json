@@ -1,0 +1,10 @@
+{
+  "name": "kareta-tunnel-recovery",
+  "private": true,
+  "version": "0.0.15-recovery",
+  "type": "module",
+  "scripts": {
+    "verify": "node scripts/verify-repository.mjs"
+  },
+  "engines": { "node": ">=20" }
+}
