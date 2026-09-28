@@ -1,0 +1,34 @@
+{
+  "schema": 1,
+  "recovered_at": "2026-09-29",
+  "tunnel_client": {
+    "version": "0.0.15",
+    "platform": "windows/amd64",
+    "binary": {
+      "name": "tunnel-client.exe",
+      "size": 22523904,
+      "sha256": "1946de55a038313a9b9b2458d05fe1719fa9cf1f20a94dd5f38fc26a98bfdd42"
+    },
+    "sbom": {
+      "name": "tunnel-client-v0.0.15-windows-amd64.spdx.json",
+      "size": 234305,
+      "sha256": "a2dac32715b3f5c31039ceba61e2794fcdf7a3ca0dd00fcb90eb86445d83a1df"
+    },
+    "license_report": {
+      "name": "tunnel-client-v0.0.15-windows-amd64-licenses.txt",
+      "size": 13456,
+      "sha256": "9b9132caf4971379fa24dae57ca75a9f2ec5571dc8b2a90e7fab71c791b42c17"
+    }
+  },
+  "cloudflared": {
+    "recovered_version": "2026.8.2",
+    "binary_name": "cloudflared.exe",
+    "binary_size": 39751680,
+    "binary_sha256": "cd0bc49aec24d0d62a37b6e842dad46000f7b401f6167b4cbace4e170819c9a2",
+    "manifest_sha256": "80003d8a8f38d6a0bd74aabc096e9f99a6e8fad8ed4da699e26a8231fa453aa1",
+    "upstream_latest_observed": {
+      "version": "2026.9.3",
+      "published_at": "2026-09-24T16:14:11Z"
+    }
+  }
+}
