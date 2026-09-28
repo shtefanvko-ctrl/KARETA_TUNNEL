@@ -1,25 +1,32 @@
 # KARETA Tunnel
 
-Transport/distribution layer used for remote access experiments.
+Recovery and release-control repository for the tunnel transport layer.
 
-## Recovered artifact state
+## What is actually recovered
 
-The recovered package contains **release binaries and SBOM/license metadata**, not the original tunnel-client source tree:
+The recovered package contains **release artifacts and supply-chain metadata**, not the original `tunnel-client` source tree.
 
-- `tunnel-client.exe` — v0.0.15 Windows amd64 artifact
-- `cloudflared.exe`
-- Cloudflare manifest
-- SPDX SBOM
-- license report / LICENSE / NOTICE
+Recovered Windows artifact set:
 
-Large executable binaries are intentionally **not committed to Git source**.
+- `tunnel-client v0.0.15` — 22,523,904 bytes, SHA-256 pinned in `release/recovered-artifacts.json`;
+- SPDX SBOM and license report — hashes pinned;
+- `cloudflared 2026.8.2` — recovered binary hash and upstream manifest pinned.
 
-## Cloudflared baseline
+The original executable files are intentionally **not committed** to Git.
 
-Recovered manifest records Cloudflared **2026.8.2**, release commit `733bfb939963e150dcf5c4faddb1603f744fbc98`.
+## Upstream status
 
-## Repository rule
+The recovered cloudflared pin is 2026.8.2. The latest upstream release observed during the 2026-09-29 audit is **2026.9.3**, published 2026-09-24. An upgrade must be rebuilt and verified; changing only the version string is not acceptable.
 
-This repository should contain source, build/release metadata and reproducible packaging scripts. Executables belong in GitHub Releases or another artifact store, not in the normal Git tree.
+## Repository invariants
 
-The original source for `tunnel-client v0.0.15` has not yet been recovered, so this repository is currently a recovery/index baseline rather than a complete buildable source repository.
+`npm run verify` and CI enforce:
+
+- no `.exe`, `.dll`, installers, archives or build/bin/dist directories in source Git;
+- valid cloudflared release metadata;
+- valid SHA-256/size records for recovered artifacts;
+- source/release metadata remain separate.
+
+## Next recovery target
+
+Recover the actual `tunnel-client v0.0.15` Go source and build definition. Until then this repository is a supply-chain/recovery index, not a complete reproducible source repository.
