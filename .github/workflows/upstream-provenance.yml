@@ -1,0 +1,43 @@
+name: Upstream provenance
+
+on:
+  push:
+    paths:
+      - 'release/**'
+      - 'docs/UPSTREAM_PROVENANCE.md'
+      - '.github/workflows/upstream-provenance.yml'
+  pull_request:
+    paths:
+      - 'release/**'
+      - 'docs/UPSTREAM_PROVENANCE.md'
+      - '.github/workflows/upstream-provenance.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-v0015:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      EXPECTED_COMMIT: a390c168ff1b2d14e73a95991c186c6aba3ff5a0
+      EXPECTED_SBOM: a2dac32715b3f5c31039ceba61e2794fcdf7a3ca0dd00fcb90eb86445d83a1df
+      EXPECTED_LICENSES: 9b9132caf4971379fa24dae57ca75a9f2ec5571dc8b2a90e7fab71c791b42c17
+      EXPECTED_ZIP: 3b53133a1e24d43f63088d843860cb1701a4c3ed6390de2e19f69089e43bddc1
+    steps:
+      - uses: actions/checkout@v4
+      - name: Resolve annotated release tag
+        run: |
+          tag_object="$(gh api repos/openai/tunnel-client/git/ref/tags/v0.0.15 --jq .object.sha)"
+          commit="$(gh api repos/openai/tunnel-client/git/tags/$tag_object --jq .object.sha)"
+          test "$commit" = "$EXPECTED_COMMIT"
+      - name: Verify official release asset digests
+        run: |
+          release="$(gh api repos/openai/tunnel-client/releases/tags/v0.0.15)"
+          sbom="$(jq -r '.assets[] | select(.name=="tunnel-client-v0.0.15-windows-amd64.spdx.json") | .digest' <<<"$release" | sed 's/^sha256://')"
+          licenses="$(jq -r '.assets[] | select(.name=="tunnel-client-v0.0.15-windows-amd64-licenses.txt") | .digest' <<<"$release" | sed 's/^sha256://')"
+          zip="$(jq -r '.assets[] | select(.name=="tunnel-client-v0.0.15-windows-amd64.zip") | .digest' <<<"$release" | sed 's/^sha256://')"
+          test "$sbom" = "$EXPECTED_SBOM"
+          test "$licenses" = "$EXPECTED_LICENSES"
+          test "$zip" = "$EXPECTED_ZIP"
