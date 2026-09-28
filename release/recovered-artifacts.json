@@ -18,6 +18,27 @@
       "name": "tunnel-client-v0.0.15-windows-amd64-licenses.txt",
       "size": 13456,
       "sha256": "9b9132caf4971379fa24dae57ca75a9f2ec5571dc8b2a90e7fab71c791b42c17"
+    },
+    "upstream": {
+      "repository": "https://github.com/openai/tunnel-client",
+      "module": "github.com/openai/tunnel-client",
+      "command_package": "github.com/openai/tunnel-client/cmd/client",
+      "tag": "v0.0.15",
+      "tag_object": "f34e8247f17fc964deeac25aead143f6640224cc",
+      "commit": "a390c168ff1b2d14e73a95991c186c6aba3ff5a0",
+      "published_at": "2026-09-25T04:40:41Z",
+      "source_asset_sha256": "98a9ca7036b5cda0626255346a209987fec445e4e0b612b27f4a873aeff4ef2e",
+      "windows_amd64_zip_sha256": "3b53133a1e24d43f63088d843860cb1701a4c3ed6390de2e19f69089e43bddc1"
+    },
+    "go_build": {
+      "go_version": "go1.27.0",
+      "buildmode": "exe",
+      "compiler": "gc",
+      "trimpath": true,
+      "cgo_enabled": false,
+      "goos": "windows",
+      "goarch": "amd64",
+      "goamd64": "v1"
     }
   },
   "cloudflared": {
