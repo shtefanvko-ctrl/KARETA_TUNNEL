@@ -1,0 +1,10 @@
+*.exe
+*.msi
+*.zip
+*.tar
+*.tar.gz
+dist/
+build/
+bin/
+.env
+.env.*
