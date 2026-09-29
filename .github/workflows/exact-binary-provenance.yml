@@ -1,0 +1,59 @@
+name: Exact recovered binary provenance
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'release/recovered-artifacts.json'
+      - '.github/workflows/exact-binary-provenance.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify-windows-amd64:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve pinned release contract
+        id: meta
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="$(jq -r '.tunnel_client.version' release/recovered-artifacts.json)"
+          asset_sha="$(jq -r '.tunnel_client.upstream.windows_amd64_zip_sha256' release/recovered-artifacts.json)"
+          exe_sha="$(jq -r '.tunnel_client.binary.sha256' release/recovered-artifacts.json)"
+          exe_size="$(jq -r '.tunnel_client.binary.size' release/recovered-artifacts.json)"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "asset_sha=$asset_sha" >> "$GITHUB_OUTPUT"
+          echo "exe_sha=$exe_sha" >> "$GITHUB_OUTPUT"
+          echo "exe_size=$exe_size" >> "$GITHUB_OUTPUT"
+
+      - name: Download official release asset
+        shell: bash
+        run: |
+          set -euo pipefail
+          version='${{ steps.meta.outputs.version }}'
+          url="https://github.com/openai/tunnel-client/releases/download/v${version}/tunnel-client-v${version}-windows-amd64.zip"
+          curl --fail --location --retry 3 --retry-delay 2 "$url" -o official.zip
+          echo "${{ steps.meta.outputs.asset_sha }}  official.zip" | sha256sum --check -
+
+      - name: Compare recovered executable contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          unzip -q official.zip -d official
+          exe="$(find official -type f -iname 'tunnel-client.exe' -print -quit)"
+          test -n "$exe"
+          actual_sha="$(sha256sum "$exe" | awk '{print $1}')"
+          actual_size="$(stat -c '%s' "$exe")"
+          test "$actual_sha" = '${{ steps.meta.outputs.exe_sha }}'
+          test "$actual_size" = '${{ steps.meta.outputs.exe_size }}'
+          {
+            echo '### Exact binary provenance: PASS'
+            echo
+            echo "- Official ZIP SHA-256: ${{ steps.meta.outputs.asset_sha }}"
+            echo "- Extracted tunnel-client.exe SHA-256: $actual_sha"
+            echo "- Extracted tunnel-client.exe size: $actual_size bytes"
+          } >> "$GITHUB_STEP_SUMMARY"
