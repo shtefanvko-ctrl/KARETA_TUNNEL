@@ -39,6 +39,12 @@
       "goos": "windows",
       "goarch": "amd64",
       "goamd64": "v1"
+    },
+    "exact_binary_verification": {
+      "status": "verified",
+      "verified_at": "2026-09-30",
+      "method": "official v0.0.15 windows-amd64 release ZIP downloaded in GitHub Actions; extracted tunnel-client.exe matched recovered size and SHA-256",
+      "workflow_run": "https://github.com/shtefanvko-ctrl/KARETA_TUNNEL/actions/runs/36638694589"
     }
   },
   "cloudflared": {
