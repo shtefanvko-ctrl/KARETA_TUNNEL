@@ -1,0 +1,25 @@
+{
+  "status": "candidate_not_integrated",
+  "observed_at": "2026-09-30",
+  "upstream": {
+    "repository": "cloudflare/cloudflared",
+    "version": "2026.9.3",
+    "published_at": "2026-09-24T16:14:11Z",
+    "windows_amd64": {
+      "asset": "cloudflared-windows-amd64.exe",
+      "size": 55366080,
+      "sha256": "f096265ec2fcbe9bb6e2d64268db167ced3fcbb83d894bdb9e2fcdb26f2ea7e2"
+    }
+  },
+  "current_recovered": {
+    "version": "2026.8.2",
+    "sha256": "cd0bc49aec24d0d62a37b6e842dad46000f7b401f6167b4cbace4e170819c9a2"
+  },
+  "promotion_gate": [
+    "recover or reconstruct the actual tunnel-client build definition from source",
+    "pin cloudflared 2026.9.3 source/module provenance",
+    "build tunnel-client distribution with the new companion using the release build path",
+    "verify artifact hashes, SBOM/licenses and lifecycle smoke tests",
+    "only then update the canonical cloudflared manifest"
+  ]
+}
