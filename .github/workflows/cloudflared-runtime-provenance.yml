@@ -1,0 +1,48 @@
+name: Cloudflared runtime provenance
+
+on:
+  push:
+    paths:
+      - 'release/cloudflared-runtime-assets.json'
+      - '.github/workflows/cloudflared-runtime-provenance.yml'
+  pull_request:
+    paths:
+      - 'release/cloudflared-runtime-assets.json'
+      - '.github/workflows/cloudflared-runtime-provenance.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-runtime-assets:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify pinned release assets against GitHub release metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="$(jq -r '.source.release' release/cloudflared-runtime-assets.json)"
+          release="$(gh api "repos/cloudflare/cloudflared/releases/tags/$version")"
+
+          for key in linux_amd64 linux_arm64; do
+            name="$(jq -r ".assets.$key.name" release/cloudflared-runtime-assets.json)"
+            expected_size="$(jq -r ".assets.$key.size" release/cloudflared-runtime-assets.json)"
+            expected_sha="$(jq -r ".assets.$key.sha256" release/cloudflared-runtime-assets.json)"
+            expected_url="$(jq -r ".assets.$key.url" release/cloudflared-runtime-assets.json)"
+
+            actual_size="$(jq -r --arg name "$name" '.assets[] | select(.name==$name) | .size' <<<"$release")"
+            actual_sha="$(jq -r --arg name "$name" '.assets[] | select(.name==$name) | .digest' <<<"$release" | sed 's/^sha256://')"
+            actual_url="$(jq -r --arg name "$name" '.assets[] | select(.name==$name) | .browser_download_url' <<<"$release")"
+
+            test "$actual_size" = "$expected_size"
+            test "$actual_sha" = "$expected_sha"
+            test "$actual_url" = "$expected_url"
+          done
+
+          echo "cloudflared runtime provenance: PASS"
