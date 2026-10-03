@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "source": {
+    "repository": "cloudflare/cloudflared",
+    "release": "2026.8.2",
+    "published_at": "2026-08-14T12:23:25Z",
+    "canonical_manifest": "release/cloudflared-manifest.json"
+  },
+  "assets": {
+    "linux_amd64": {
+      "name": "cloudflared-linux-amd64",
+      "size": 39799316,
+      "sha256": "fcfb02b575a52ca1af2e3267af4e1517bcdeb30ac48c834c69abaed3c0576ad2",
+      "url": "https://github.com/cloudflare/cloudflared/releases/download/2026.8.2/cloudflared-linux-amd64"
+    },
+    "linux_arm64": {
+      "name": "cloudflared-linux-arm64",
+      "size": 37404344,
+      "sha256": "7747d94570fb390cf47dcb4f9555c193c6355cda9793f0d878d9049e5d6a7790",
+      "url": "https://github.com/cloudflare/cloudflared/releases/download/2026.8.2/cloudflared-linux-arm64"
+    }
+  },
+  "policy": {
+    "install_only_after_sha256_match": true,
+    "reject_unpinned_latest": true
+  }
+}
