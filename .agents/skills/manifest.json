@@ -1,0 +1,13 @@
+{
+  "schema": "kareta-tunnel.agent-skills.v1",
+  "skills": [
+    "tunnel-provenance-orchestrator",
+    "tunnel-upstream-release-audit",
+    "tunnel-artifact-integrity",
+    "tunnel-source-recovery",
+    "tunnel-verification-audit",
+    "tunnel-devil-review"
+  ],
+  "supplyChainFirst": true,
+  "noDuplicateSkills": true
+}
